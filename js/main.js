@@ -3,13 +3,7 @@ const getRandomIntInclusive = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
 
-  if (min < 0 || max < 0) {
-    return NaN;
-  }
-  if (max <= min) {
-    return NaN;
-  }
-  if (max === min) {
+  if (min < 0 || max < 0 || max <= min) {
     return NaN;
   }
 
