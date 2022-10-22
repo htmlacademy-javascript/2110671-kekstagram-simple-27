@@ -5,14 +5,20 @@ const pictureTemplate = document.querySelector('#picture').content.querySelector
 
 const posts = createPosts();
 
-const postsFragment = document.createDocumentFragment();
 
-posts.forEach(({url, likes, comments}) => {
-  const pictureElement = pictureTemplate.cloneNode(true);
-  pictureElement.querySelector('.picture__img').src = url;
-  pictureElement.querySelector('.picture__comments').textContent = comments;
-  pictureElement.querySelector('.picture__likes').textContent = likes;
-  postsFragment.appendChild(pictureElement);
-});
+const renderPictures = () => {
+  const postsFragment = document.createDocumentFragment();
 
-picturesSection.appendChild(postsFragment);
+  posts.forEach(({url, likes, comments}) => {
+    const pictureElement = pictureTemplate.cloneNode(true);
+    pictureElement.querySelector('.picture__img').src = url;
+    pictureElement.querySelector('.picture__comments').textContent = comments;
+    pictureElement.querySelector('.picture__likes').textContent = likes;
+    postsFragment.appendChild(pictureElement);
+  });
+
+  picturesSection.appendChild(postsFragment);
+
+};
+
+export {renderPictures};
