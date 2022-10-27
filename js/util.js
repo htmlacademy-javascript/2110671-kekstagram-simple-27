@@ -16,4 +16,6 @@ const checkStringLength = (string, maxLength) => string.length <= maxLength;
 
 checkStringLength('Hello world!', 15);
 
-export {getRandomIntInclusive};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {getRandomIntInclusive, isEscapeKey};
