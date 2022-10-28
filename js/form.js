@@ -35,9 +35,22 @@ const closeOverlay = () => {
 };
 
 const onFormUploadFileChange = () => {
-  console.log('change');
   openOverlay();
 };
 
 formUploadFile.addEventListener('change', onFormUploadFileChange);
 
+const pristine = new Pristine(form, {
+  classTo: 'img-upload__text',
+  errorTextParent: 'img-upload__text',
+  errorTextClass: 'img-upload__error-text',
+});
+
+form.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
+  const isValid = pristine.validate();
+  if (isValid) {
+    form.submit();
+  }
+});
