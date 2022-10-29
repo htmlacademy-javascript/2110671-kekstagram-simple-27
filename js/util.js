@@ -10,11 +10,8 @@ const getRandomIntInclusive = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-getRandomIntInclusive(5, 10);
-
+// eslint-disable-next-line no-unused-vars
 const checkStringLength = (string, maxLength) => string.length <= maxLength;
-
-checkStringLength('Hello world!', 15);
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 

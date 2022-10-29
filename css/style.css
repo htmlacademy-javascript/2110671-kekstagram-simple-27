@@ -1192,6 +1192,10 @@ main {
   transform: translateX(-50%);
 }
 
+.img-upload__error-text {
+  color: #fb4b4a;
+}
+
 
 /**
   * Экраны ошибки и успеха загрузки изображения
