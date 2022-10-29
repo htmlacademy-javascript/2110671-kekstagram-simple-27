@@ -1,44 +1,40 @@
 import {isEscapeKey} from './util.js';
 
-const body = document.querySelector('body');
 const form = document.querySelector('#upload-select-image');
 const formUploadFile = form.querySelector('#upload-file');
 const formOverlay = form.querySelector('.img-upload__overlay');
-const closeOverlayButton = formOverlay.querySelector('#upload-cancel');
+const closeButton = formOverlay.querySelector('#upload-cancel');
 
-const onOverlayEscKeydown = (evt) => {
+const onDocumentEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeOverlay();
+    closeModal();
   }
 };
 
-const onCloseOverlayButtonClick = () => {
-  closeOverlay();
+const oncloseButtonClick = () => {
+  closeModal();
 };
 
-const openOverlay = () => {
+const openModal = () => {
   formOverlay.classList.remove('hidden');
-  body.classList.add('modal-open');
+  document.body.classList.add('modal-open');
 
-  closeOverlayButton.addEventListener('click', onCloseOverlayButtonClick);
-  document.addEventListener('keydown', onOverlayEscKeydown);
+  closeButton.addEventListener('click', oncloseButtonClick);
+  document.addEventListener('keydown', onDocumentEscKeydown);
 };
 
-const closeOverlay = () => {
+function closeModal() {
   formOverlay.classList.add('hidden');
-  body.classList.remove('modal-open');
+  document.body.classList.remove('modal-open');
   formUploadFile.value = '';
 
-  document.removeEventListener('keydown', onOverlayEscKeydown);
-  closeOverlayButton.removeEventListener('click', onCloseOverlayButtonClick);
-};
+  document.removeEventListener('keydown', onDocumentEscKeydown);
+  closeButton.removeEventListener('click', oncloseButtonClick);
+}
 
 const onFormUploadFileChange = () => {
-  openOverlay();
+  openModal();
 };
-
-formUploadFile.addEventListener('change', onFormUploadFileChange);
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__text',
@@ -46,11 +42,18 @@ const pristine = new Pristine(form, {
   errorTextClass: 'img-upload__error-text',
 });
 
-form.addEventListener('submit', (evt) => {
+const onFormSubmit = (evt) => {
   evt.preventDefault();
-
   const isValid = pristine.validate();
+
   if (isValid) {
     form.submit();
   }
-});
+};
+
+const setFotoListeners = () => {
+  formUploadFile.addEventListener('change', onFormUploadFileChange);
+  form.addEventListener('submit', onFormSubmit);
+};
+
+export {setFotoListeners};
