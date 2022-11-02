@@ -1,6 +1,7 @@
 const SCALE_STEP = 25;
 const SCALE_MAX = 100;
 const SCALE_MIN = 25;
+const DEFAULT_SCALE = 100;
 
 const scale = document.querySelector('.scale');
 const scaleButtonMinus = scale.querySelector('.scale__control--smaller');
@@ -15,7 +16,7 @@ const onScaleButtonMinusClick = () => {
   if (currentScaleValue > SCALE_MIN) {
     const newValue = currentScaleValue - SCALE_STEP;
     scaleInput.value = `${newValue}%`;
-    image.style = `transform: scale(${newValue / 100})`;
+    image.style.transform = `scale(${newValue / 100})`;
   }
 };
 
@@ -25,8 +26,13 @@ const onScaleButtonPlusClick = () => {
   if (currentScaleValue < SCALE_MAX) {
     const newValue = currentScaleValue + SCALE_STEP;
     scaleInput.value = `${newValue}%`;
-    image.style = `transform: scale(${newValue / 100})`;
+    image.style.transform = `scale(${newValue / 100})`;
   }
+};
+
+const resetScale = () => {
+  image.style.transform = `scale(${DEFAULT_SCALE / 100})`;
+  scaleInput.value = `${DEFAULT_SCALE}%`;
 };
 
 const setScaleButtonsListeners = () => {
@@ -34,4 +40,4 @@ const setScaleButtonsListeners = () => {
   scaleButtonPlus.addEventListener('click', onScaleButtonPlusClick);
 };
 
-export {setScaleButtonsListeners};
+export {setScaleButtonsListeners, resetScale};
