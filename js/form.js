@@ -1,4 +1,7 @@
 import {isEscapeKey} from './util.js';
+import {resetEffects} from './foto-effects.js';
+import {resetScale} from './foto-scale.js';
+
 
 const form = document.querySelector('#upload-select-image');
 const formUploadFile = form.querySelector('#upload-file');
@@ -27,6 +30,8 @@ function closeModal() {
   formOverlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   formUploadFile.value = '';
+  resetEffects();
+  resetScale();
 
   document.removeEventListener('keydown', onDocumentEscKeydown);
   closeButton.removeEventListener('click', oncloseButtonClick);
