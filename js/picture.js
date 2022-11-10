@@ -1,12 +1,7 @@
-import {createPosts} from './data.js';
-
 const picturesSection = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
-const posts = createPosts();
-
-
-const renderPictures = () => {
+const renderPictures = (posts) => {
   const postsFragment = document.createDocumentFragment();
 
   posts.forEach(({url, likes, comments}) => {
