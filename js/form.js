@@ -1,21 +1,33 @@
 import {isEscapeKey} from './util.js';
 import {resetEffects} from './foto-effects.js';
 import {resetScale} from './foto-scale.js';
-
+import {sendData} from './api.js';
+import {openSuccessPopup, openErrorPopup} from './popup.js';
 
 const form = document.querySelector('#upload-select-image');
 const formUploadFile = form.querySelector('#upload-file');
 const formOverlay = form.querySelector('.img-upload__overlay');
 const closeButton = formOverlay.querySelector('#upload-cancel');
+const submitButton = formOverlay.querySelector('#upload-submit');
 
 const onDocumentEscKeydown = (evt) => {
+  const errorPopup = document.querySelector('.error');
+
   if (isEscapeKey(evt)) {
-    closeModal();
+    if (!errorPopup) {
+      closeModal();
+    }
   }
 };
 
 const oncloseButtonClick = () => {
   closeModal();
+};
+
+const onOverlayClick = (evt) => {
+  if (evt.target.classList.contains('img-upload__overlay')) {
+    closeModal();
+  }
 };
 
 const openModal = () => {
@@ -24,6 +36,7 @@ const openModal = () => {
 
   closeButton.addEventListener('click', oncloseButtonClick);
   document.addEventListener('keydown', onDocumentEscKeydown);
+  document.addEventListener('click', onOverlayClick);
 };
 
 function closeModal() {
@@ -32,6 +45,8 @@ function closeModal() {
   formUploadFile.value = '';
   resetEffects();
   resetScale();
+  form.reset();
+  // document.querySelector('.img-upload__error-text').remove();
 
   document.removeEventListener('keydown', onDocumentEscKeydown);
   closeButton.removeEventListener('click', oncloseButtonClick);
@@ -47,12 +62,45 @@ const pristine = new Pristine(form, {
   errorTextClass: 'img-upload__error-text',
 });
 
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикую...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+const onSuccess = () => {
+  unblockSubmitButton();
+  form.reset();
+  resetEffects();
+  resetScale();
+  closeModal();
+  openSuccessPopup();
+};
+
+const onFail = () => {
+  openErrorPopup();
+  unblockSubmitButton();
+};
+
 const onFormSubmit = (evt) => {
   evt.preventDefault();
   const isValid = pristine.validate();
 
   if (isValid) {
-    form.submit();
+    blockSubmitButton();
+    sendData(
+      () => {
+        onSuccess();
+      },
+      () => {
+        onFail();
+      },
+      new FormData(evt.target)
+    );
   }
 };
 
