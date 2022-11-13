@@ -1,56 +1,45 @@
-import {isEscapeKey} from './util.js';
+import { isEscapeKey } from './util.js';
 
 const successPopupTemplate = document.querySelector('#success').content.querySelector('.success');
-const successPopup = successPopupTemplate.cloneNode(true);
 const errorPopupTemplate = document.querySelector('#error').content.querySelector('.error');
-const errorPopup = errorPopupTemplate.cloneNode(true);
 
-const onDocumentEscKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    closeSuccessPopup();
-    closeErrorPopup();
-  }
-};
+const renderPopup = (node) => {
+  document.body.appendChild(node);
+  const button = node.querySelector('button');
 
-const onOverlayClick = (evt) => {
-  if (evt.target.classList.contains('success')) {
-    closeSuccessPopup();
+  const closePopup = () => {
+    node.remove();
+    document.removeEventListener('keydown', onDocumentEscKeydown);
+  };
+
+  const onButtonClick = () => closePopup();
+
+  const onOverlayClick = (evt) => {
+    if (evt.target !== node) {
+      return;
+    }
+    closePopup();
+  };
+
+  function onDocumentEscKeydown (evt) {
+    if (isEscapeKey(evt)) {
+      closePopup();
+    }
   }
-  if (evt.target.classList.contains('error')) {
-    closeErrorPopup();
-  }
+
+  button.addEventListener('click', onButtonClick);
+  document.addEventListener('keydown', onDocumentEscKeydown);
+  node.addEventListener('click', onOverlayClick);
 };
 
 const openSuccessPopup = () => {
-  document.body.appendChild(successPopup);
-  const closeButton = successPopup.querySelector('.success__button');
-
-  closeButton.addEventListener('click', closeSuccessPopup);
-  document.addEventListener('keydown', onDocumentEscKeydown);
-  document.addEventListener('click', onOverlayClick);
+  const successPopup = successPopupTemplate.cloneNode(true);
+  renderPopup(successPopup);
 };
 
 const openErrorPopup = () => {
-  document.body.appendChild(errorPopup);
-  const closeButton = errorPopup.querySelector('.error__button');
-
-  closeButton.addEventListener('click', closeErrorPopup);
-  document.addEventListener('keydown', onDocumentEscKeydown);
-  document.addEventListener('click', onOverlayClick);
+  const errorPopup = errorPopupTemplate.cloneNode(true);
+  renderPopup(errorPopup);
 };
 
-function closeSuccessPopup() {
-  successPopup.remove();
-
-  document.removeEventListener('keydown', onDocumentEscKeydown);
-  document.removeEventListener('click', onOverlayClick);
-}
-
-function closeErrorPopup() {
-  errorPopup.remove();
-
-  document.removeEventListener('keydown', onDocumentEscKeydown);
-  document.removeEventListener('click', onOverlayClick);
-}
-
-export {openSuccessPopup, openErrorPopup};
+export { openSuccessPopup, openErrorPopup };

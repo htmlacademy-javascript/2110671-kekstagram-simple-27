@@ -1,14 +1,20 @@
-import {isEscapeKey} from './util.js';
-import {resetEffects} from './foto-effects.js';
-import {resetScale} from './foto-scale.js';
-import {sendData} from './api.js';
-import {openSuccessPopup, openErrorPopup} from './popup.js';
+import { isEscapeKey } from './util.js';
+import { resetEffects } from './foto-effects.js';
+import { resetScale } from './foto-scale.js';
+import { sendData } from './api.js';
+import { openSuccessPopup, openErrorPopup } from './popup.js';
 
 const form = document.querySelector('#upload-select-image');
 const formUploadFile = form.querySelector('#upload-file');
 const formOverlay = form.querySelector('.img-upload__overlay');
 const closeButton = formOverlay.querySelector('#upload-cancel');
 const submitButton = formOverlay.querySelector('#upload-submit');
+
+const pristine = new Pristine(form, {
+  classTo: 'img-upload__text',
+  errorTextParent: 'img-upload__text',
+  errorTextClass: 'img-upload__error-text',
+});
 
 const onDocumentEscKeydown = (evt) => {
   const errorPopup = document.querySelector('.error');
@@ -46,7 +52,7 @@ function closeModal() {
   resetEffects();
   resetScale();
   form.reset();
-  // document.querySelector('.img-upload__error-text').remove();
+  pristine.reset();
 
   document.removeEventListener('keydown', onDocumentEscKeydown);
   closeButton.removeEventListener('click', oncloseButtonClick);
@@ -55,12 +61,6 @@ function closeModal() {
 const onFormUploadFileChange = () => {
   openModal();
 };
-
-const pristine = new Pristine(form, {
-  classTo: 'img-upload__text',
-  errorTextParent: 'img-upload__text',
-  errorTextClass: 'img-upload__error-text',
-});
 
 const blockSubmitButton = () => {
   submitButton.disabled = true;
@@ -72,16 +72,13 @@ const unblockSubmitButton = () => {
   submitButton.textContent = 'Опубликовать';
 };
 
-const onSuccess = () => {
+const onSendSuccess = () => {
   unblockSubmitButton();
-  form.reset();
-  resetEffects();
-  resetScale();
   closeModal();
   openSuccessPopup();
 };
 
-const onFail = () => {
+const onSendFail = () => {
   openErrorPopup();
   unblockSubmitButton();
 };
@@ -93,20 +90,16 @@ const onFormSubmit = (evt) => {
   if (isValid) {
     blockSubmitButton();
     sendData(
-      () => {
-        onSuccess();
-      },
-      () => {
-        onFail();
-      },
+      onSendSuccess,
+      onSendFail,
       new FormData(evt.target)
     );
   }
 };
 
-const setFotoListeners = () => {
+const setPhotoListeners = () => {
   formUploadFile.addEventListener('change', onFormUploadFileChange);
   form.addEventListener('submit', onFormSubmit);
 };
 
-export {setFotoListeners};
+export { setPhotoListeners };

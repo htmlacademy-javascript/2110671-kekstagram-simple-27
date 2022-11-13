@@ -40,4 +40,4 @@ const setScaleButtonsListeners = () => {
   scaleButtonPlus.addEventListener('click', onScaleButtonPlusClick);
 };
 
-export {setScaleButtonsListeners, resetScale};
+export { setScaleButtonsListeners, resetScale };

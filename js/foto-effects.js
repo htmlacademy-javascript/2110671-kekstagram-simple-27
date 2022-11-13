@@ -119,4 +119,4 @@ const setImageEffectsListeners = () => {
   updateSlider();
 };
 
-export {setImageEffectsListeners, resetEffects};
+export { setImageEffectsListeners, resetEffects };
