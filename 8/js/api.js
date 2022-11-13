@@ -1,10 +1,12 @@
-import {showAlert} from './util.js';
+import { showAlert } from './util.js';
 
 const GETTING_DATA_ERROR = 'Ошибка загрузки данных с сервера';
 const SENDING_DATA_ERROR = 'Ошибка отправки данных на сервер';
 
+const API_URL = 'https://27.javascript.pages.academy/kekstagram-simple';
+
 const getData = (onSuccess) => {
-  fetch('https://27.javascript.pages.academy/kekstagram-simple/data')
+  fetch(`${API_URL}/data`)
     .then((response) => response.json())
     .then((data) => {
       onSuccess(data);
@@ -16,7 +18,7 @@ const getData = (onSuccess) => {
 
 const sendData = (onSuccess, onFail, body) => {
   fetch(
-    'https://27.javascript.pages.academy/kekstagram-simple',
+    API_URL,
     {
       method: 'POST',
       body,
@@ -34,4 +36,4 @@ const sendData = (onSuccess, onFail, body) => {
     });
 };
 
-export {getData, sendData};
+export { getData, sendData };
