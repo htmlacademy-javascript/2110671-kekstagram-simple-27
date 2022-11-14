@@ -51,6 +51,7 @@ const DEFAULT_EFFECT = EFFECTS[0];
 const effectList = document.querySelector('.effects__list');
 const image = document.querySelector('.img-upload__preview img');
 const sliderElement = document.querySelector('.effect-level__slider');
+const sliderElementWrapper = document.querySelector('.img-upload__effect-level');
 const effectLevelInput = document.querySelector('.effect-level__value');
 
 let chosenEffect = DEFAULT_EFFECT;
@@ -58,7 +59,7 @@ let chosenEffect = DEFAULT_EFFECT;
 const isDefault = () => chosenEffect === DEFAULT_EFFECT;
 
 const updateSlider = () => {
-  sliderElement.classList.remove('hidden');
+  sliderElementWrapper.classList.remove('hidden');
   sliderElement.noUiSlider.updateOptions({
     range: {
       min: chosenEffect.min,
@@ -69,7 +70,7 @@ const updateSlider = () => {
   });
 
   if (isDefault()) {
-    sliderElement.classList.add('hidden');
+    sliderElementWrapper.classList.add('hidden');
   }
 };
 
@@ -111,11 +112,11 @@ noUiSlider.create(sliderElement, {
   step: DEFAULT_EFFECT.step,
   connect: 'lower',
 });
-updateSlider();
 
 const setImageEffectsListeners = () => {
   effectList.addEventListener('click', onEffectsListClick);
   sliderElement.noUiSlider.on('update', onSliderUpdate);
+  updateSlider();
 };
 
-export {setImageEffectsListeners, resetEffects};
+export { setImageEffectsListeners, resetEffects };
