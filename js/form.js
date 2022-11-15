@@ -1,8 +1,9 @@
 import { isEscapeKey } from './util.js';
-import { resetEffects } from './foto-effects.js';
-import { resetScale } from './foto-scale.js';
+import { resetEffects } from './photo-effects.js';
+import { resetScale } from './photo-scale.js';
 import { sendData } from './api.js';
 import { openSuccessPopup, openErrorPopup } from './popup.js';
+import { uploadFiles } from './photo-upload.js';
 
 const form = document.querySelector('#upload-select-image');
 const formUploadFile = form.querySelector('#upload-file');
@@ -59,6 +60,7 @@ function closeModal() {
 }
 
 const onFormUploadFileChange = () => {
+  uploadFiles();
   openModal();
 };
 
