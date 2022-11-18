@@ -20,10 +20,8 @@ const pristine = new Pristine(form, {
 const onDocumentEscKeydown = (evt) => {
   const errorPopup = document.querySelector('.error');
 
-  if (isEscapeKey(evt)) {
-    if (!errorPopup) {
-      closeModal();
-    }
+  if (isEscapeKey(evt) && !errorPopup) {
+    closeModal();
   }
 };
 
@@ -64,25 +62,20 @@ const onFormUploadFileChange = () => {
   openModal();
 };
 
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
-  submitButton.textContent = 'Публикую...';
-};
-
-const unblockSubmitButton = () => {
-  submitButton.disabled = false;
-  submitButton.textContent = 'Опубликовать';
+const toggleSubmitButton = (isDisabled = false) => {
+  submitButton.disabled = isDisabled;
+  submitButton.textContent = isDisabled ? 'Публикую...' : 'Опубликовать';
 };
 
 const onSendSuccess = () => {
-  unblockSubmitButton();
+  toggleSubmitButton();
   closeModal();
   openSuccessPopup();
 };
 
 const onSendFail = () => {
   openErrorPopup();
-  unblockSubmitButton();
+  toggleSubmitButton();
 };
 
 const onFormSubmit = (evt) => {
@@ -90,7 +83,7 @@ const onFormSubmit = (evt) => {
   const isValid = pristine.validate();
 
   if (isValid) {
-    blockSubmitButton();
+    toggleSubmitButton(true);
     sendData(
       onSendSuccess,
       onSendFail,
